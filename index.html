@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Controle de Multas</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#fff;--bg2:#f4f4f0;--bg3:#efefeb;
+  --tx:#1a1a18;--tx2:#6b6b67;
+  --bd:rgba(0,0,0,0.12);--bd2:rgba(0,0,0,0.22);
+  --r:8px;--rl:12px;
+  --f:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --fm:'SF Mono','Fira Code',monospace;
+}
+body{font-family:var(--f);background:var(--bg3);color:var(--tx);min-height:100vh;}
+.app{max-width:1300px;margin:0 auto;padding:2rem 1.5rem;}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.75rem;flex-wrap:wrap;gap:1rem;}
+.ht{font-size:22px;font-weight:600;display:flex;align-items:center;gap:10px;}
+.hs{font-size:13px;color:var(--tx2);margin-top:3px;}
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin-bottom:1.5rem;}
+.sc{background:var(--bg);border:0.5px solid var(--bd);border-radius:var(--r);padding:15px 17px;}
+.sl{font-size:11px;color:var(--tx2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em;}
+.sv{font-size:22px;font-weight:600;}
+.sv.d{color:#A32D2D;}.sv.w{color:#854F0B;}.sv.s{color:#3B6D11;}.sv.sm{font-size:15px;}
+.ab{background:#FAEEDA;border:0.5px solid #EF9F27;border-radius:var(--r);padding:13px 17px;margin-bottom:1.5rem;display:flex;align-items:flex-start;gap:12px;}
+.ai{font-size:20px;color:#854F0B;margin-top:1px;flex-shrink:0;}
+.at{font-weight:600;margin-bottom:5px;font-size:13px;color:#412402;}
+.ax{font-size:13px;color:#633806;line-height:1.7;}
+.tabs{display:flex;gap:2px;margin-bottom:1rem;border-bottom:1px solid var(--bd);flex-wrap:wrap;}
+.tab{font-size:13px;padding:8px 14px;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;color:var(--tx2);font-family:var(--f);}
+.tab.active{color:var(--tx);border-bottom-color:var(--tx);font-weight:600;}
+.tab:hover:not(.active){background:var(--bg2);border-radius:6px 6px 0 0;}
+.tb{display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap;}
+.tb input,.tb select{padding:8px 11px;border:0.5px solid var(--bd2);border-radius:var(--r);font-size:13px;font-family:var(--f);background:var(--bg);color:var(--tx);}
+.tb input{flex:1;min-width:160px;}
+.tb input:focus,.tb select:focus{outline:none;border-color:#378ADD;}
+.abtn{background:var(--tx);color:var(--bg);border:none;padding:8px 16px;border-radius:var(--r);font-size:13px;font-family:var(--f);cursor:pointer;display:flex;align-items:center;gap:6px;font-weight:500;white-space:nowrap;}
+.abtn:hover{opacity:.85;}
+.sbtn{background:var(--bg);color:var(--tx);border:0.5px solid var(--bd2);padding:8px 13px;border-radius:var(--r);font-size:13px;font-family:var(--f);cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.sbtn:hover{background:var(--bg2);}
+.tw{background:var(--bg);border:0.5px solid var(--bd);border-radius:var(--rl);overflow:auto;}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:1000px;}
+thead{background:var(--bg2);}
+th{padding:9px 11px;text-align:left;font-weight:600;color:var(--tx2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:0.5px solid var(--bd);white-space:nowrap;}
+td{padding:9px 11px;border-bottom:0.5px solid var(--bd);color:var(--tx);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg2);}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;}
+.bw{background:#E6F1FB;color:#185FA5;}
+.ba{background:#EAF3DE;color:#3B6D11;}
+.bp{background:#E1F5EE;color:#0F6E56;}
+.bo{background:#FCEBEB;color:#A32D2D;}
+.be{background:#EEEDFE;color:#534AB7;}
+.dot{width:6px;height:6px;border-radius:50%;display:inline-block;flex-shrink:0;}
+.dok{color:var(--tx2);font-size:12px;}
+.dwn{color:#854F0B;font-weight:600;font-size:12px;}
+.dur{color:#A32D2D;font-weight:600;font-size:12px;}
+.actions{display:flex;gap:3px;}
+.ib{background:none;border:none;cursor:pointer;padding:4px 5px;color:var(--tx2);border-radius:5px;font-size:15px;display:flex;align-items:center;}
+.ib:hover{background:var(--bg2);color:var(--tx);}
+.pt{font-family:var(--fm);background:var(--bg2);padding:2px 6px;border-radius:4px;font-size:11px;letter-spacing:.06em;font-weight:700;}
+.ic{max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.empty{text-align:center;padding:3rem;color:var(--tx2);font-size:14px;}
+.empty i{font-size:36px;display:block;margin-bottom:10px;opacity:.4;}
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;align-items:center;justify-content:center;}
+.mo.open{display:flex;}
+.md{background:var(--bg);border-radius:var(--rl);border:0.5px solid var(--bd);padding:1.75rem;width:580px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 12px 40px rgba(0,0,0,0.18);}
+.mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;}
+.mt{font-size:17px;font-weight:600;}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.ff{grid-column:1/-1;}
+.fg label{display:block;font-size:12px;color:var(--tx2);margin-bottom:4px;font-weight:500;}
+.fg input,.fg select,.fg textarea{width:100%;padding:8px 10px;border:0.5px solid var(--bd2);border-radius:var(--r);font-size:13px;font-family:var(--f);background:var(--bg);color:var(--tx);}
+.fg textarea{resize:vertical;min-height:55px;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:#378ADD;}
+.fa{display:flex;justify-content:flex-end;gap:10px;margin-top:1.5rem;}
+.bcl{background:none;border:0.5px solid var(--bd2);padding:8px 17px;border-radius:var(--r);font-size:13px;font-family:var(--f);cursor:pointer;color:var(--tx);}
+.bsv{background:var(--tx);color:var(--bg);border:none;padding:8px 19px;border-radius:var(--r);font-size:13px;font-family:var(--f);cursor:pointer;font-weight:500;}
+@media(max-width:640px){.sg{grid-template-columns:1fr 1fr;}.fg{grid-template-columns:1fr;}.ff{grid-column:1;}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div>
+      <div class="ht"><i class="ti ti-license"></i> Controle de Multas</div>
+      <div class="hs">Gestão de autuações e prazos</div>
+    </div>
+    <button class="abtn" onclick="openModal()"><i class="ti ti-plus"></i> Nova multa</button>
+  </div>
+  <div class="sg" id="stats"></div>
+  <div id="abox"></div>
+  <div class="tabs">
+    <button class="tab active" onclick="setTab('todas',this)">Todas</button>
+    <button class="tab" onclick="setTab('aguardando_motorista',this)">Aguardando motorista</button>
+    <button class="tab" onclick="setTab('em_analise',this)">Em análise</button>
+    <button class="tab" onclick="setTab('aceito_cdt',this)">Aceito na CDT</button>
+    <button class="tab" onclick="setTab('vencido',this)">Vencidas</button>
+    <button class="tab" onclick="setTab('pago',this)">Pagas</button>
+  </div>
+  <div class="tb">
+    <input type="text" placeholder="Buscar por placa, motorista ou auto..." id="si" oninput="render()"/>
+    <select onchange="render()" id="fo"><option value="">Todos os órgãos</option></select>
+    <select onchange="render()" id="fm"><option value="">Todos os motoristas</option></select>
+    <select onchange="render()" id="fmes"><option value="">Todos os meses</option></select>
+    <button class="sbtn" onclick="clearFilters()"><i class="ti ti-filter-off"></i> Limpar filtros</button>
+    <button class="sbtn" onclick="exportCSV()"><i class="ti ti-download"></i> Exportar CSV</button>
+  </div>
+  <div class="tw">
+    <table>
+      <thead><tr>
+        <th>Placa</th><th>Motorista</th><th>Órgão</th><th>Auto</th><th>Infração</th>
+        <th>Valor</th><th>Data</th><th>Prazo RCA</th><th>Status</th><th>Observações</th><th></th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</div>
+<div class="mo" id="modal">
+  <div class="md">
+    <div class="mh"><span class="mt" id="mtitle">Nova multa</span><button class="ib" onclick="closeModal()"><i class="ti ti-x"></i></button></div>
+    <div class="fg">
+      <div><label>Placa *</label><input type="text" id="fp" placeholder="ABC-1234" maxlength="10" style="text-transform:uppercase"/></div>
+      <div><label>Motorista *</label><input type="text" id="fm2" placeholder="Nome completo"/></div>
+      <div><label>Órgão *</label><input type="text" id="fo2" placeholder="PRF, DETRAN-RJ, CET-RIO..."/></div>
+      <div><label>Auto de infração</label><input type="text" id="fau" placeholder="Nº do auto"/></div>
+      <div class="ff"><label>Local</label><input type="text" id="flo" placeholder="Local - Município"/></div>
+      <div class="ff"><label>Infração</label><input type="text" id="fin" placeholder="Descrição da infração"/></div>
+      <div><label>Valor (R$) *</label><input type="number" id="fv" placeholder="0.00" min="0" step="0.01"/></div>
+      <div><label>Status</label>
+        <select id="fst">
+          <option value="aguardando_motorista">Aguardando motorista</option>
+          <option value="aceito_cdt">Aceito na CDT</option>
+          <option value="pago">Pago</option>
+          <option value="vencido">Vencido</option>
+          <option value="em_analise">Em análise</option>
+        </select>
+      </div>
+      <div><label>Data da infração</label><input type="date" id="fdt"/></div>
+      <div><label>Prazo RCA</label><input type="date" id="fpr"/></div>
+      <div class="ff"><label>Observações</label><textarea id="fob" placeholder="Informações adicionais..."></textarea></div>
+    </div>
+    <div class="fa">
+      <button class="bcl" onclick="closeModal()">Cancelar</button>
+      <button class="bsv" onclick="saveMulta()">Salvar</button>
+    </div>
+  </div>
+</div>
+<script>
+const SOURCE=[{"placa": "RIU0H70", "motorista": "THIAGO ELIAS", "orgao": "PRF", "auto": "J005446584", "local": "RJ-BR 101-KM 332.32-D - RIO DE JANEIRO", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2025-12-11", "prazo": "2026-02-23", "status": "pago", "obs": ""}, {"placa": "LSE9F95", "motorista": "WAGNER SIQUEIRA", "orgao": "PRF", "auto": "J005476155", "local": "RJ-BR 465-KM 4.63-C - SEROPEDICA", "infracao": "TRANSI. EM VELOC. SUP A MAX PERM. EM MAIS DE 20% ATE 50%", "valor": 195.23, "vencimento": "2025-12-12", "prazo": "2026-03-12", "status": "pago", "obs": "REAL INFRATOR EXPIRADO"}, {"placa": "KPT1J99", "motorista": "LUIZ GUSTAVO", "orgao": "PRF", "auto": "J005431936", "local": "RJ-BR 101-KM 298.3-C - ITABORAI", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2025-12-10", "prazo": "2026-01-08", "status": "pago", "obs": ""}, {"placa": "KXO5A59", "motorista": "DIMAS SIMÕES", "orgao": "CET-RIO", "auto": "RD31256101", "local": "ESTRADA DA GAVEA 523-SÃO CONRADO - RIO DE JANEIRO", "infracao": "ESTAC. EM DESACORDO COM A REGUL. ESPEC. PELA SINALIZAÇÃO", "valor": 195.23, "vencimento": "2025-12-19", "prazo": "2026-03-02", "status": "aceito_cdt", "obs": "REG. SR. CLAUDIO (NÃO DESCONTAR)"}, {"placa": "KXO5A59", "motorista": "DIMAS SIMÕES", "orgao": "CET-RIO", "auto": "RF50184596", "local": "RUA FARME DE AMOEDO 83-IPANEMA - RIO DE JANEIRO", "infracao": "ESTACIONAR NO PASSEIO", "valor": 195.23, "vencimento": "2025-11-14", "prazo": "2026-01-26", "status": "pago", "obs": ""}, {"placa": "TTE6J44", "motorista": "DIOGO ALVES", "orgao": "PRF", "auto": "X40621499", "local": "RJ106 KM 169,7-MACAE/RJ ST:NITEROI - MACAE", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2025-04-29", "prazo": "2026-03-12", "status": "pago", "obs": ""}, {"placa": "RJU2F64", "motorista": "DIOGO ALVES", "orgao": "DETRAN-RJ", "auto": "T802147372", "local": "BR-101 KM-322 UF-RJ - NITEROI", "infracao": "DEIXAR DE CONSER. O VEIC. NA FAIXA A ELE DESTI. PELA SINAL. DE REGUL.", "valor": 130.16, "vencimento": "2024-08-09", "prazo": "2026-01-29", "status": "pago", "obs": "JÁ DESCONTADA"}, {"placa": "RKD7J74", "motorista": "PAULO SANTA ANA", "orgao": "PRF", "auto": "J001749454", "local": "RJ-BR 101- KM 280.30-C - ITABORAI", "infracao": "TRANSI. EM VELOC. SUP A MAX PERM. EM MAIS DE 20% ATE 50%", "valor": 195.23, "vencimento": "2025-05-23", "prazo": "2026-01-29", "status": "pago", "obs": "JÁ DESCONTADA"}, {"placa": "RKD7J74", "motorista": "PAULO SANTA ANA", "orgao": "DETRAN-RJ", "auto": "G29136271", "local": "RUA BELMIRO VIVAS S/N PROX AO N.165 - GUAPIMIRIM", "infracao": "ESTACIONAR EM LOC./HORA. PRIBIDO ESPECIF. PELA SINALIZAÇÃO", "valor": 130.16, "vencimento": "2025-11-17", "prazo": "2026-02-19", "status": "pago", "obs": ""}, {"placa": "RKD7J74", "motorista": "PAULO SANTA ANA", "orgao": "CET-RIO", "auto": "RN00118581", "local": "RUA DOM MARCOS BARBOSA 2,3 ANDAR - RIO DE JANEIRO", "infracao": "MULTAR POR NÃO IDENT. DO CONDU. INFRATOR IMPOSTA A PESSOA JURIDICA", "valor": 586.94, "vencimento": "2025-12-05", "prazo": "2026-03-26", "status": "aceito_cdt", "obs": "ORIG. DA MULTA RA20983944"}, {"placa": "RKD7J74", "motorista": "PAULO SANTA ANA", "orgao": "PRF", "auto": "R881632187", "local": "BR-116 KM-80 UF-RJ - TERESOPOLIS", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2025-11-04", "prazo": "2026-01-29", "status": "pago", "obs": "JÁ DESCONTADA"}, {"placa": "LUH9A65", "motorista": "OSWALDO NILO", "orgao": "PRF", "auto": "R813307872", "local": "BR-116 KM-39 UF-RJ - S. JOSE DO VALE DO R. PRETO", "infracao": "TRANSI. EM VELOC. SUP A MAX PERM. EM MAIS DE 20% ATE 50%", "valor": 195.23, "vencimento": "2055-06-06", "prazo": "2026-01-29", "status": "pago", "obs": "JÁ DESCONTADA"}, {"placa": "LUH9A65", "motorista": "LEONARDO DE SOUZA", "orgao": "PRF", "auto": "J003971051", "local": "RJ-BR 101-KM 419.60-D - MANGARATIBA", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2025-09-10", "prazo": "2026-01-15", "status": "pago", "obs": ""}, {"placa": "LQM7F74", "motorista": "OSWALDO NILO", "orgao": "PRF", "auto": "J005103904", "local": "RJ-BR 116-KM 39.08-C - S. JOSE DO VALE DO R. PRETO", "infracao": "TRANSI. EM VELOC. SUP A MAX PERM. EM MAIS DE 20% ATE 50%", "valor": 195.23, "vencimento": "2025-11-26", "prazo": "", "status": "pago", "obs": ""}, {"placa": "KRZ8F42", "motorista": "RENATO DO CARMO", "orgao": "PRF", "auto": "J002931058", "local": "RJ-BR 116-KM 39.08-C - S. JOSE DO VALE DO R. PRETO", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2025-07-21", "prazo": "2026-01-29", "status": "pago", "obs": "JÁ DESCONTADA"}, {"placa": "KRZ8F42", "motorista": "DAVID LOPES", "orgao": "PRF", "auto": "J003582822", "local": "RJ-BR 465-KM 7.51-D - SEROPEDICA", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2025-08-22", "prazo": "2026-01-09", "status": "vencido", "obs": "(MULTA SUMIU DO SENATRAM E DO BRADESCO)"}, {"placa": "RJL8F79", "motorista": "JEFERSON MIRANDA", "orgao": "PRF", "auto": "J003583545", "local": "RJ- BR 101-KM 323.34-D - NITEROI", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2025-08-22", "prazo": "2026-01-16", "status": "pago", "obs": ""}, {"placa": "LTE8J14", "motorista": "THIAGO ELIAS", "orgao": "PRF", "auto": "J003409292", "local": "RJ-BR 101 – KM 280.30-C - ITABORAI", "infracao": "TRANSI. EM VELOC. SUP A MAX PERM. EM MAIS DE 20% ATE 50%", "valor": 195.23, "vencimento": "2025-08-12", "prazo": "2026-02-23", "status": "pago", "obs": ""}, {"placa": "KRF6E12", "motorista": "CRISTIANO DE MENDONÇA", "orgao": "PRF", "auto": "R915259559", "local": "BR-116 KM-81 UF-RJ - TERESOPOLIS", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2025-03-12", "prazo": "2026-02-19", "status": "pago", "obs": ""}, {"placa": "KRF6E12", "motorista": "CRISTIANO DE MENDONÇA", "orgao": "PRF", "auto": "Y34783558", "local": "BR-116 KM-KM 201-ST ITABORAI - APERIBE", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2024-08-19", "prazo": "", "status": "pago", "obs": ""}, {"placa": "KYH9D76", "motorista": "FABIANO MAIA DA SILVA", "orgao": "PRF", "auto": "N001716189", "local": "RJ-BR 040-KM 109.00 D - DUQUE DE CAXIAS", "infracao": "DEIXAR O PASSAGEIRO DE USAR O CINTO", "valor": 195.23, "vencimento": "2025-03-14", "prazo": "2026-01-29", "status": "pago", "obs": "MULTA DO AJUDANTE"}, {"placa": "LRQ7A87", "motorista": "MAICON DOS SANTOS", "orgao": "DETRAN-RJ", "auto": "S31383104", "local": "RUA ALAGOAS 254 ALCANTRA - SÃO GONÇALO", "infracao": "ESTACIONAR SOBRE FAIXA DESTINADA A PEDESTRE", "valor": 195.23, "vencimento": "2025-02-12", "prazo": "", "status": "pago", "obs": ""}, {"placa": "RIR7J59", "motorista": "ALEXANDRE PEREIRA", "orgao": "DETRAN-RJ", "auto": "L30496186", "local": "RUA PADRE SIQUEIRA 37 - PETROPOLIS", "infracao": "ESTACIONAR NO PASSEIO", "valor": 195.23, "vencimento": "2025-05-29", "prazo": "2026-02-23", "status": "pago", "obs": ""}, {"placa": "LRQ7A87", "motorista": "MAICON DOS SANTOS", "orgao": "PRF", "auto": "Z50102676", "local": "RJ122 002,0 – GUAPIMIRIM/RJ SENTIDO C. DE MACACU - GUAPIMIRIM", "infracao": "TRANSI. EM VELOC. SUP A MAX PERM. EM MAIS DE 20% ATE 50%", "valor": 195.23, "vencimento": "2024-11-24", "prazo": "2026-02-19", "status": "pago", "obs": ""}, {"placa": "RKU7H47", "motorista": "LEONARDO BELMONTE", "orgao": "PRF", "auto": "Z50101572", "local": "RJ122 002,0 – GUAPIMIRIM/RJ SENTIDO C. DE MACACU - GUAPIMIRIM", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2025-11-17", "prazo": "2026-03-12", "status": "pago", "obs": ""}, {"placa": "SRI5I29", "motorista": "CRISTIANO DE MENDONÇA", "orgao": "PRF", "auto": "J000112135", "local": "RJ-BR 101-KM 280.30-C - ITABORAI", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2024-10-08", "prazo": "2026-01-29", "status": "pago", "obs": "JÁ DESCONTADA"}, {"placa": "LSS9C7", "motorista": "JOÃO H. FURTADO", "orgao": "DETRAN-RJ", "auto": "L30412334", "local": "RUA DR. DARIO ARAGÃO, PROX 531 CENTRO - BARRA MANSA", "infracao": "ESTACIONAR EM LOC./HORA. PRIBIDO ESPECIF. PELA SINALIZAÇÃO", "valor": 195.23, "vencimento": "2025-01-16", "prazo": "2026-03-27", "status": "pago", "obs": ""}, {"placa": "LSS9C7", "motorista": "JOÃO H. FURTADO", "orgao": "PRF", "auto": "Y34800480", "local": "RJ 116 KM 194-ST A. DE PADUA - ITAOCARA", "infracao": "TRANSI. EM VELOC. SUP A MAX PERM. EM MAIS DE 20% ATE 50%", "valor": 195.23, "vencimento": "2024-10-18", "prazo": "2026-03-27", "status": "aguardando_motorista", "obs": ""}, {"placa": "LTM9D02", "motorista": "RAFAEL BRAGA", "orgao": "PRF", "auto": "J29941040", "local": "MARECHAL DEODORO 966 - DUQUE DE CAXIAS", "infracao": "ESTACIONAR NA PISTA DE ROLAMENTO DE VIAS DE TRANSITO RAPIDO", "valor": 293.47, "vencimento": "2024-09-23", "prazo": "2026-02-09", "status": "pago", "obs": ""}, {"placa": "LTM9D02", "motorista": "RAFAEL BRAGA", "orgao": "DETRAN-RJ", "auto": "", "local": "RJ-KM 1,2-ST BR 10 - RIO BONITO", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2025-10-23", "prazo": "", "status": "pago", "obs": ""}, {"placa": "LNS3879", "motorista": "MICHEL DA SILVA", "orgao": "PRF", "auto": "J002091704", "local": "RJ-BR 116-KM 228.67-D - PIRAI", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2025-06-06", "prazo": "2026-01-29", "status": "pago", "obs": "JÁ DESCONTADA"}, {"placa": "TTJ1C65", "motorista": "FELIPE DA SILVA", "orgao": "PRF", "auto": "J003842482", "local": "RJ-BR 465-KM 7.51-D - SEROPEDICA", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2025-09-04", "prazo": "2026-01-29", "status": "pago", "obs": "JÁ DESCONTADA"}, {"placa": "SRB2D29", "motorista": "RONI DE OLIVEIRA", "orgao": "PRF", "auto": "X42566287", "local": "RJ -124 A1 KM 6,4-ST RIO BONITO - ARARUAMA", "infracao": "AVANÇAR O SINAL VERM. DO SEMAF. EXC HOUVER SINALZ PERM LIVRE", "valor": 293.47, "vencimento": "2024-08-09", "prazo": "2026-01-29", "status": "pago", "obs": "JÁ DESCONTADA"}, {"placa": "RIU0H70", "motorista": "LUCIANO VIEIRA", "orgao": "PRF", "auto": "Z54260986", "local": "RJ 155 KM 47 SENTIDO BARRA MANSA - BARRA MANSA", "infracao": "ESTACIONAR NO PASSEIO", "valor": 195.23, "vencimento": "2025-08-18", "prazo": "2026-02-09", "status": "aceito_cdt", "obs": "SEM COBRANÇA DO MOTORISTA"}, {"placa": "RIU0H70", "motorista": "LUCIANO VIEIRA", "orgao": "PRF", "auto": "Z50100192", "local": "RJ-BR 101-KM 419.60-D - GUAPIMIRIM", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2025-09-27", "prazo": "2026-01-26", "status": "pago", "obs": ""}, {"placa": "KRA5I69", "motorista": "MARCIO BARBOSA", "orgao": "DETRAN-RJ", "auto": "T29486890", "local": "R. PADRE TINT RIO DE FRENTE AO N 17 - TERESOPOLIS", "infracao": "ESTACIONAR EM LOC./HORA. PRIBIDO ESPECIF. PELA SINALIZAÇÃO", "valor": 195.23, "vencimento": "2025-09-23", "prazo": "2026-01-29", "status": "pago", "obs": "JÁ DESCONTADA"}, {"placa": "KRA5I69", "motorista": "RODINEI DA SILVA", "orgao": "DETRAN-RJ", "auto": "Q29794056", "local": "RUA PREFEITO JO?O G GALDINO NR 08 - ANGRA DOS REIS", "infracao": "ESTACIONAR NAS ESQUINAS E A MENOS DE 5M DO ALINHAMENTO DA VIA TRANV.", "valor": 130.16, "vencimento": "2024-12-10", "prazo": "2026-01-09", "status": "vencido", "obs": "MOTORISTA DEMITIDO"}, {"placa": "RJU2F64", "motorista": "RODRIGO ANTONIO", "orgao": "PRF", "auto": "J004111268", "local": "RJ-BR 101 -KM 280.30-C - ITABORAI", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2025-09-22", "prazo": "", "status": "pago", "obs": "JÁ DESCONTADA"}, {"placa": "RJU2F64", "motorista": "RODRIGO ANTONIO", "orgao": "PRF", "auto": "Z50100194", "local": "RJ122 002,0 – GUAPIMIRIM/RJ SENTIDO C. DE MACACU - GUAPIMIRIM", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2025-10-27", "prazo": "2026-02-19", "status": "pago", "obs": ""}, {"placa": "KRS6588", "motorista": "RODRIGO DOS SANTOS", "orgao": "PRF", "auto": "N003738464", "local": "RJ-BR 101-KM 411.00-C - ITAGUAI", "infracao": "PERMITIR POSSE E CONDUÇÃO DO VEIC. POR PESSOA SEM POSSUIR CURSOS ESP. OBRIG.", "valor": 293.47, "vencimento": "2025-11-24", "prazo": "", "status": "em_analise", "obs": "recorrida"}, {"placa": "KRS6588", "motorista": "RODRIGO DOS SANTOS", "orgao": "DETRAN-RJ", "auto": "F29329924", "local": "AV CONS JULIUS ARP 511 BC - NOVA FRIBURGO", "infracao": "AVANÇAR O SINAL VERM. DO SEMAF. EXC HOUVER SINALZ PERM LIVRE", "valor": 293.47, "vencimento": "2025-11-24", "prazo": "2026-01-16", "status": "pago", "obs": ""}, {"placa": "KRS6588", "motorista": "RODRIGO DOS SANTOS", "orgao": "PRF", "auto": "N003738463", "local": "RJ-BR 101-KM 411.00-C - ITAGUAI", "infracao": "DIRIGIR VEICULO SEM POSSUIR CURSOS ESPECIALIZADOS OBG", "valor": 293.47, "vencimento": "2025-11-24", "prazo": "", "status": "em_analise", "obs": "recorrida"}, {"placa": "KWX6I41", "motorista": "LUIS CLAUDIO DE SA", "orgao": "DETRAN-RJ", "auto": "T29441584", "local": "PRAÇA BALTAZAR DA SILVEIRA N 78 - TERESOPOLIS", "infracao": "ESTACIONAR NO PONTO DE EMBARQUE/DESEMBARQUE DE PASSAG. TRANSPORTE COLET.", "valor": 130.16, "vencimento": "2025-07-29", "prazo": "2026-01-16", "status": "pago", "obs": ""}, {"placa": "KWX6I41", "motorista": "DAVID LOPES CARDOSO", "orgao": "PRF", "auto": "J003645019", "local": "RJ-BR 465-KM 7,51-D - SEROPEDICA", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2025-08-25", "prazo": "", "status": "pago", "obs": ""}, {"placa": "KRU8I95", "motorista": "LEONARDO DE SOUZA", "orgao": "DETRAN-RJ", "auto": "F29331413", "local": "AV EUT FRIB X R PE YABAR - NOVA FRIBURGO", "infracao": "AVANÇAR O SINAL VERM. DO SEMAF. EXC HOUVER SINALZ PERM LIVRE", "valor": 293.47, "vencimento": "2025-12-12", "prazo": "", "status": "pago", "obs": ""}, {"placa": "RJU2F64", "motorista": "LEONARDO BELMONTE", "orgao": "DETRAN-RJ", "auto": "F29329195", "local": "AV CONS JULIUS ARP N188 CB - NOVA FRIBURGO", "infracao": "AVANÇAR O SINAL VERM. DO SEMAF. EXC HOUVER SINALZ PERM LIVRE", "valor": 293.47, "vencimento": "2025-11-11", "prazo": "2026-03-12", "status": "pago", "obs": ""}, {"placa": "LSS9C7", "motorista": "ROSALVO CAMARGO LIMA", "orgao": "DETRAN-RJ", "auto": "L30420696", "local": "RUA PINTO RIBEIRO, PROXIMO 15 CENTRO - BARRA MANSA", "infracao": "ESTACIONAR AO LADO OU SOBRE MARCAS DE CANALIZAÇÃO", "valor": 195.23, "vencimento": "2025-10-13", "prazo": "2026-01-07", "status": "aguardando_motorista", "obs": ""}, {"placa": "KRZ8F40", "motorista": "BRUNO SILVA DA PAZ", "orgao": "DETRAN-RJ", "auto": "L30377214", "local": "AVENIDA DEPUTADO OCTAVIO CABRAL - ITAGUAI", "infracao": "DESOBEDECER AS ORDENS EMANADAS PELA AUTORIDADE", "valor": 195.23, "vencimento": "2025-10-30", "prazo": "", "status": "pago", "obs": "pg no vencimento 14/02"}, {"placa": "KRZ8F40", "motorista": "BRUNO SILVA DA PAZ", "orgao": "DETRAN-RJ", "auto": "L30377213", "local": "AVENIDA DEPUTADO OCTAVIO CABRAL - ITAGUAI", "infracao": "ESTACIONAR AFASTADODA GUIA DA CALÇADA (MEIO_FIO) A MAIS DE 1M", "valor": 195.23, "vencimento": "2025-10-30", "prazo": "", "status": "pago", "obs": "pg no vencimento 10/02"}, {"placa": "KRZ8F40", "motorista": "BRUNO SILVA DA PAZ", "orgao": "DETRAN-RJ", "auto": "L30377212", "local": "AVENIDA DEPUTADO OCTAVIO CABRAL - ITAGUAI", "infracao": "CONDUZIR O VEICULO COM ILEGIBILIDADE DA PLACA", "valor": 293.47, "vencimento": "2025-10-30", "prazo": "2026-01-26", "status": "aceito_cdt", "obs": "SEM COBRANÇA DO MOTORISTA"}, {"placa": "TTN4B80", "motorista": "ALEXANDRO DE SÁ", "orgao": "PRF", "auto": "N004122756", "local": "BR-101 KM 318.00 - SÃO GONÇALO", "infracao": "DEIXAR O CONDUTOR DE USAR O CINTO DE SEGURANÇA", "valor": 195.23, "vencimento": "2026-01-12", "prazo": "2026-01-26", "status": "pago", "obs": ""}, {"placa": "LTM9D02", "motorista": "RAFAEL BRAGA", "orgao": "PRF", "auto": "J005753849", "local": "RJ-BR 101-KM 280.10-D - ITABORAI", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2026-01-08", "prazo": "2026-01-26", "status": "pago", "obs": ""}, {"placa": "LUN4G76", "motorista": "ANDRE LUIS", "orgao": "CET-RIO", "auto": "RN00075613", "local": "RUA DOM MARCOS BARBOSA 2,3 ANDAR - RIO DE JANEIRO", "infracao": "MULTAR POR NÃO IDENT. DO CONDU. INFRATOR IMPOSTA A PESSOA JURIDICA", "valor": 260.32, "vencimento": "2025-01-12", "prazo": "2026-01-28", "status": "aceito_cdt", "obs": "SEM COBRANÇA DO MOTORISTA"}, {"placa": "LUN4G76", "motorista": "ANDRE LUIS", "orgao": "CET-RIO", "auto": "RD31119709", "local": "RUA MARTIM AFONSO S/N LEME - RIO DE JANEIRO", "infracao": "ESTACIONAR EM LOC./HORA. PRIBIDO ESPECIF. PELA SINALIZAÇÃO", "valor": 130.16, "vencimento": "2026-09-17", "prazo": "2026-01-28", "status": "pago", "obs": ""}, {"placa": "RKU7H47", "motorista": "WELLINGTON ALVES", "orgao": "CET-RIO", "auto": "RA11425292", "local": "R ANDRE ROCHA PX3605 - RIO DE JANEIRO", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2025-05-28", "prazo": "2026-01-29", "status": "pago", "obs": "JÁ DESCONTADA"}, {"placa": "RKU7H47", "motorista": "RAFAEL BRAGA", "orgao": "CET-RIO", "auto": "RA40597718", "local": "EST MONTEIRO PX111 - RIO DE JANEIRO", "infracao": "TRANSITAR EM LOCAL/HORARIO NÃO PERMITIDO", "valor": 130.16, "vencimento": "2024-10-30", "prazo": "2026-01-29", "status": "pago", "obs": "JÁ DESCONTADA"}, {"placa": "RJR5C96", "motorista": "ALEF MARTINS", "orgao": "PRF", "auto": "Z50102353", "local": "RJ122 002,0 – GUAPIMIRIM/RJ SENTIDO C. DE MACACU - GUAPIMIRIM", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2025-11-17", "prazo": "", "status": "pago", "obs": ""}, {"placa": "RKD7J74", "motorista": "ROSALVO CAMARGO LIMA", "orgao": "PRF", "auto": "R89364943", "local": "BR-101 KM-298 UF RJ - ITABORAI", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.46, "vencimento": "2024-12-09", "prazo": "2026-02-19", "status": "pago", "obs": ""}, {"placa": "LNS3879", "motorista": "RODRIGO DOS SANTOS", "orgao": "PRF", "auto": "J006166025", "local": "RJ-BR 465-KM 14.36-D - SEROPEDICA", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2026-01-07", "prazo": "2026-02-23", "status": "pago", "obs": ""}, {"placa": "LTM9D01", "motorista": "WILLIAN REBELO", "orgao": "PRF", "auto": "N003425703", "local": "BR 101-KM 473.00-C - ANGRA DOS REIS", "infracao": "DEFEITO", "valor": 130.16, "vencimento": "2025-10-16", "prazo": "2026-02-23", "status": "aceito_cdt", "obs": "SEM COBRANÇA DO MOTORISTA"}, {"placa": "LTM9D01", "motorista": "WILLIAN REBELO", "orgao": "PRF", "auto": "N003425704", "local": "BR 101-KM 473.00-C - ANGRA DOS REIS", "infracao": "DEFEITO", "valor": 195.23, "vencimento": "2025-10-16", "prazo": "2026-02-23", "status": "aceito_cdt", "obs": "SEM COBRANÇA DO MOTORISTA"}, {"placa": "LTM9D01", "motorista": "WILLIAN REBELO", "orgao": "PRF", "auto": "N003425705", "local": "BR 101-KM 473.00-C - ANGRA DOS REIS", "infracao": "DEFEITO", "valor": 130.16, "vencimento": "2025-10-16", "prazo": "2026-02-23", "status": "aceito_cdt", "obs": "SEM COBRANÇA DO MOTORISTA"}, {"placa": "LTM9D01", "motorista": "WILLIAN REBELO", "orgao": "PRF", "auto": "N003425706", "local": "BR 101-KM 473.00-C - ANGRA DOS REIS", "infracao": "DEFEITO", "valor": 195.16, "vencimento": "2025-10-16", "prazo": "2026-02-23", "status": "aceito_cdt", "obs": "SEM COBRANÇA DO MOTORISTA"}, {"placa": "KRZ8F40", "motorista": "BRUNO SILVA DA PAZ", "orgao": "DETRAN-RJ", "auto": "L30411367", "local": "RUA JOSE HIPOLITO 425 CENTRO - BARRA MANSA", "infracao": "ESTACIONAR NO PASSEIO", "valor": 195.23, "vencimento": "2024-12-13", "prazo": "2026-02-23", "status": "pago", "obs": ""}, {"placa": "KRZ8541", "motorista": "FABIO AZEVEDO MEIRELES", "orgao": "PRF", "auto": "N002942907", "local": "RJ-BR   101 KM 322.00-C - NITEROI", "infracao": "CONDUZIR O VEIC. COM EQUIP EM DESACORDO", "valor": 195.23, "vencimento": "2025-08-22", "prazo": "2026-02-26", "status": "aceito_cdt", "obs": "SEM COBRANÇA DO MOTORISTA"}, {"placa": "KRZ8541", "motorista": "FABIO AZEVEDO MEIRELES", "orgao": "PRF", "auto": "N002943209", "local": "RJ-BR 101 KM 322.00-C - NITEROI", "infracao": "CONDUZIR O VEIC D =DE TRANSO DE PASS OU CARGA EM DESACORDO", "valor": 130.16, "vencimento": "2025-08-22", "prazo": "2026-02-26", "status": "aceito_cdt", "obs": "SEM COBRANÇA DO MOTORISTA"}, {"placa": "KRZ8541", "motorista": "FABIO AZEVEDO MEIRELES", "orgao": "PRF", "auto": "N002958625", "local": "RJ-BR 101-KM 269.00-C - RIO BONITO", "infracao": "DESOBEDECER AS ORDENS EMANADAS PELA AUTORIDADE", "valor": 195.23, "vencimento": "2025-08-26", "prazo": "2026-02-26", "status": "aceito_cdt", "obs": "SEM COBRANÇA DO MOTORISTA"}, {"placa": "RKA2E49", "motorista": "MARCELO DE OLIVEIRA", "orgao": "PRF", "auto": "N000574947", "local": "RJ-BR 116-KM 305.00-C - RESENDE", "infracao": "DEIXAR DE ADENTRAR AS AREAS DESTINADAS A PESAGEM DE VEICULOS", "valor": 195.23, "vencimento": "2024-10-30", "prazo": "2026-02-26", "status": "aceito_cdt", "obs": "SEM COBRANÇA DO MOTORISTA"}, {"placa": "KXO5A59", "motorista": "", "orgao": "CET-RIO", "auto": "RN00267194", "local": "RUA DOM MARCOS BARBOSA 2,3 ANDAR - RIO DE JANEIRO", "infracao": "MULTAR POR NÃO IDENT. DO CONDU. INFRATOR IMPOSTA A PESSOA JURIDICA", "valor": 390.46, "vencimento": "2026-02-13", "prazo": "", "status": "aceito_cdt", "obs": "SEM COBRANÇA DO MOTORISTA"}, {"placa": "KXO5A59", "motorista": "", "orgao": "CET-RIO", "auto": "RN00205718", "local": "RUA DOM MARCOS BARBOSA 2,3 ANDAR - RIO DE JANEIRO", "infracao": "MULTAR POR NÃO IDENT. DO CONDU. INFRATOR IMPOSTA A PESSOA JURIDICA", "valor": 390.46, "vencimento": "2026-10-27", "prazo": "", "status": "aceito_cdt", "obs": "SEM COBRANÇA DO MOTORISTA"}, {"placa": "TEO8F94", "motorista": "THIAGO ELIAS", "orgao": "PRF", "auto": "J002775267", "local": "RJ-BR 116-KM 98.52 - GUAPIMIRIM", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2025-07-14", "prazo": "2026-02-03", "status": "aguardando_motorista", "obs": ""}, {"placa": "LQM7F74", "motorista": "THIAGO ELIAS", "orgao": "PRF", "auto": "N004484710", "local": "RJ-BR 101-KM 307.00-D - SÃO GONÇALO", "infracao": "ULTRAPASSAR PELA DIREITA", "valor": 130.16, "vencimento": "2026-02-19", "prazo": "2026-02-27", "status": "pago", "obs": ""}, {"placa": "LQM7F74", "motorista": "THIAGO ELIAS", "orgao": "PRF", "auto": "N004484709", "local": "RJ-BR 101-KM 307.00-D - SÃO GONÇALO", "infracao": "DEIXAR DE DAR PASSAGEM", "valor": 130.16, "vencimento": "2026-02-19", "prazo": "2026-02-27", "status": "pago", "obs": ""}, {"placa": "KRZ8F40", "motorista": "LEONARDO DE SOUZA", "orgao": "PRF", "auto": "N004538792", "local": "RJ-BR 101-KM 322.0-C - NITEROI", "infracao": "ULTRAPASSAR VEICULOS MOTORIZADOS EM FILA", "valor": 195.23, "vencimento": "2026-02-19", "prazo": "2026-03-12", "status": "pago", "obs": ""}, {"placa": "KRZ8F40", "motorista": "LEONARDO DE SOUZA", "orgao": "PRF", "auto": "N004538793", "local": "RJ-BR 101-KM 322.0-C - NITEROI", "infracao": "PARAR NA PISTA DE ROLAMENTO", "valor": 195.23, "vencimento": "2026-02-19", "prazo": "2026-03-12", "status": "pago", "obs": ""}, {"placa": "RIU0H70", "motorista": "LUCIANO VIEIRA", "orgao": "PRF", "auto": "J007236604", "local": "RJ-BR 101-KM 508.00-C - ANGRA DOS REIS", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2026-02-24", "prazo": "2026-04-09", "status": "pago", "obs": ""}, {"placa": "KRZ8F0", "motorista": "BRUNO DA PAZ", "orgao": "PRF", "auto": "Z56549464", "local": "RJ106 KM 01,6 - SÃO GONÇALO", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2026-02-12", "prazo": "2026-03-20", "status": "pago", "obs": ""}, {"placa": "KRU8I95", "motorista": "WEBERT RICHARDS", "orgao": "DETRAN-RJ", "auto": "2026-03-20 00:00:00", "local": "RJ-BR 101-KM 329.52-D - RIO DE JANEIRO", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2026-01-19", "prazo": "2026-03-20", "status": "aguardando_motorista", "obs": ""}, {"placa": "RIR7J57", "motorista": "WAGNER SIQUEIRA", "orgao": "DETRAN-RJ", "auto": "2026-01-05 00:00:00", "local": "RJ-BR 101-KM 382.40-C - RIO DE JANEIRO", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2026-01-05", "prazo": "2026-03-20", "status": "vencido", "obs": "PRAZO EXPIRADO PARA ACEITE REAL INFRATOR"}, {"placa": "KRZ8541", "motorista": "CRISTIANO DE MENDONÇA", "orgao": "DETRAN-RJ", "auto": "OK", "local": "RJ-106, KM 19,3-ST MACAE - MARICA", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2026-01-21", "prazo": "2026-04-06", "status": "vencido", "obs": "PRAZO EXPIRADO PARA ACEITE REAL INFRATOR"}, {"placa": "RJU2F64", "motorista": "RODRIGO ANTONIO", "orgao": "PRF", "auto": "J007361846", "local": "RJ-BR 465-KM 21.22-D - NOVA IGUAÇU", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2026-03-03", "prazo": "2026-04-09", "status": "pago", "obs": ""}, {"placa": "KYH9D76", "motorista": "FABIANO MAIA", "orgao": "DETRAN-RJ", "auto": "2026-04-12 00:00:00", "local": "AV RUI BARBO X R H ZAMITH BC - NOVA FRIBURGO", "infracao": "AVANÇAR O SINAL VERM. DO SEMAF. EXC HOUVER SINALZ PERM LIVRE", "valor": 293.47, "vencimento": "2026-03-12", "prazo": "2026-03-12", "status": "aguardando_motorista", "obs": ""}, {"placa": "TTN4B83", "motorista": "JOÃO H. FURTADO", "orgao": "DETRAN-RJ", "auto": "2026-03-27 00:00:00", "local": "AVENIDA ANTONIO DE ALMEIDA 1434 - VOLTA REDONDA", "infracao": "ESTACIONAR SOBRE FAIXA DESTINADA A PEDESTRE", "valor": 195.23, "vencimento": "2026-02-06", "prazo": "2026-03-27", "status": "aguardando_motorista", "obs": ""}, {"placa": "TTN4B83", "motorista": "JOÃO H. FURTADO", "orgao": "PRF", "auto": "N004168598", "local": "RJ-BR 101-KM 298.00-D - ITABORAI", "infracao": "DEIXAR DE DAR PASSAGEM A ESQUERDA", "valor": 130.16, "vencimento": "2026-01-22", "prazo": "2026-03-27", "status": "pago", "obs": ""}, {"placa": "TTN4B83", "motorista": "JOÃO H. FURTADO", "orgao": "PRF", "auto": "N004168112", "local": "RJ-BR 101-KM 298.00-D - ITABORAI", "infracao": "DEIXAR DE INDICAR C ANTEC MUDANÇA DE FAIXA", "valor": 156.18, "vencimento": "2026-01-22", "prazo": "2026-03-27", "status": "aguardando_motorista", "obs": ""}, {"placa": "TTN4B83", "motorista": "JOÃO H. FURTADO", "orgao": "PRF", "auto": "J006448360", "local": "RJ-BR 101-KM 329.52-D - RIO DE JANEIRO", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2026-01-19", "prazo": "2026-03-27", "status": "aguardando_motorista", "obs": ""}, {"placa": "TTN4B83", "motorista": "JOÃO H. FURTADO", "orgao": "DETRAN-RJ", "auto": "OK", "local": "R FELIPE CARDOSO PX BRT CAJUEIROS - RIO DE JANEIRO", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2026-01-15", "prazo": "2026-03-27", "status": "aguardando_motorista", "obs": ""}, {"placa": "KRZ8541", "motorista": "FABIO AZEVEDO", "orgao": "PRF", "auto": "R825848067", "local": "BR-116 KM 56 UF RJ - TERESOPOLIS", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2024-08-27", "prazo": "2026-03-26", "status": "aguardando_motorista", "obs": ""}, {"placa": "TEA1E02", "motorista": "ALEF MARTINS", "orgao": "CET-RIO", "auto": "RA11812398", "local": "R FELIPE CARDOSO PX BRT CAJUEIROS - RIO DE JANEIRO", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2025-10-24", "prazo": "2026-03-27", "status": "pago", "obs": "BOLETO PAGO PARA LOCALIZA"}, {"placa": "SYV4J39", "motorista": "ALEF MARTINS", "orgao": "DETRAN-RJ", "auto": "COD76332", "local": "RJ BR 040 KM 109.00-D", "infracao": "DIRIGIR VEICULO MANUSEANDO TELEFONE", "valor": 293.47, "vencimento": "2025-06-26", "prazo": "2026-03-27", "status": "pago", "obs": "BOLETO PAGO PARA LOCALIZA"}, {"placa": "KRF6E12", "motorista": "RENATO DO CARMO", "orgao": "DETRAN-RJ", "auto": "F293402620", "local": "AV JULIO A T X R PRES VARGASCB - NOVA FRIBURGO", "infracao": "AVANÇAR O SINAL VERM. DO SEMAF. EXC HOUVER SINALZ PERM LIVRE", "valor": 293.47, "vencimento": "2026-03-17", "prazo": "2026-04-06", "status": "aguardando_motorista", "obs": ""}, {"placa": "RKA2E49", "motorista": "EVERSON DE ANDRADE", "orgao": "DETRAN-RJ", "auto": "K30731666", "local": "RUA DOMINGOS FARIAS 95 - RIO DAS OSTRAS", "infracao": "DIRIGIR SEGURANDO TELEFONE CELULAR", "valor": 293.47, "vencimento": "2025-10-08", "prazo": "2026-04-06", "status": "pago", "obs": "MULTA JÁ DESCONTADA"}, {"placa": "RIR7J57", "motorista": "PEDRO AUGUSTO", "orgao": "PRF", "auto": "Y34826944", "local": "RJ 116-ST ANTONIO DE PADUA - ITAOCARA", "infracao": "TRANSITAR EM VELOCIDADE SUP EM MAIS DE 50%", "valor": 880.41, "vencimento": "2025-01-21", "prazo": "2026-04-10", "status": "vencido", "obs": "MOTORISTA DEMITIDO"}, {"placa": "LTF7210", "motorista": "PEDRO AUGUSTO", "orgao": "PRF", "auto": "J004148286", "local": "RJ-BR 101-KM 280.30-C - ITABORAI", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2025-10-06", "prazo": "2026-04-10", "status": "vencido", "obs": "MOTORISTA DEMITIDO"}, {"placa": "LTF7210", "motorista": "PEDRO AUGUSTO", "orgao": "PRF", "auto": "Z54274217", "local": "RJ 186 KM 94, BOM JARDIM ZONA RURAL - BOM JESUS DE ITABAPOANA", "infracao": "ULTRAPASSAR PELA CONTRAMÃO", "valor": 1467.35, "vencimento": "2025-11-07", "prazo": "2026-04-10", "status": "vencido", "obs": "MOTORISTA DEMITIDO"}, {"placa": "LTF7210", "motorista": "PEDRO AUGUSTO", "orgao": "PRF", "auto": "J002026886", "local": "RJ-BR 116-KM 226.54-D - PIRAI", "infracao": "VELOCIDADE", "valor": 195.23, "vencimento": "2025-06-02", "prazo": "2026-04-10", "status": "vencido", "obs": "MOTORISTA DEMITIDO I54623653"}, {"placa": "KRS6588", "motorista": "PEDRO AUGUSTO", "orgao": "PRF", "auto": "J005139908", "local": "RJ-BR 101-KM 298.65 - ITABORAI", "infracao": "VELOCIDADE", "valor": 130.16, "vencimento": "2025-11-28", "prazo": "2025-04-10", "status": "vencido", "obs": "MOTORISTA DEMITIDO"}, {"placa": "RIR7J59", "motorista": "", "orgao": "DETRAN-RJ", "auto": "F29241427", "local": "AVENIDA EUTERPRE FRIBURGUENSE 96 - NOVA FRIBURGO", "infracao": "ESTACIONAR IMPEDINDO A MOVIMENTAÇÃO DE OUTRO VEICULO", "valor": 130.16, "vencimento": "2025-12-11", "prazo": "2026-04-10", "status": "vencido", "obs": "MULTA NÃO PRECEDENTE, PERDEU O PRAZO"}, {"placa": "LQE8437", "motorista": "HENRIQUE SANTOS", "orgao": "PRF", "auto": "N003126483", "local": "RJ-BR 101-KM 269.00-D - RIO BONITO", "infracao": "DEIXAR DE CONSERVAR NA FAIXA DA DIREITA", "valor": 130.16, "vencimento": "2025-09-24", "prazo": "2026-04-10", "status": "vencido", "obs": "MULTA NÃO PRECEDENTE, PERDEU O PRAZO"}, {"placa": "LQE8437", "motorista": "HENRIQUE SANTOS", "orgao": "PRF", "auto": "N003126484", "local": "RJ-BR 101-KM 269.00-D - RIO BONITO", "infracao": "CONDUZIR VEICULO COM EQUIPAMENTO EM DESACORDO", "valor": 195.23, "vencimento": "2025-09-24", "prazo": "2025-04-10", "status": "vencido", "obs": "MULTA NÃO PRECEDENTE, PERDEU O PRAZO"}, {"placa": "LQE8437", "motorista": "HENRIQUE SANTOS", "orgao": "PRF", "auto": "N003126482", "local": "RJ-BR 101-KM 269.00-D - RIO BONITO", "infracao": "CONDUZIR VEIC SEM LEGIBILIDADE DA PLACA", "valor": 293.47, "vencimento": "2025-09-24", "prazo": "2025-04-10", "status": "vencido", "obs": "MULTA NÃO PRECEDENTE, PERDEU O PRAZO"}, {"placa": "LQE8437", "motorista": "HENRIQUE SANTOS", "orgao": "PRF", "auto": "N003126485", "local": "RJ-BR 101-KM 269.00-D - RIO BONITO", "infracao": "CONDUZIR VEIUCLO DE CARGA EM DESACORDO", "valor": 130.16, "vencimento": "2025-09-24", "prazo": "2025-04-10", "status": "vencido", "obs": "MULTA NÃO PRECEDENTE, PERDEU O PRAZO"}, {"placa": "LQE8437", "motorista": "HENRIQUE SANTOS", "orgao": "PRF", "auto": "N003256569", "local": "RJ-BR 101-KM 269.00-C - RIO BONITO", "infracao": "DESOBEDECER AS ORDENS EMANADAS PELA AUTORIDADE", "valor": 195.23, "vencimento": "2025-09-26", "prazo": "2025-04-10", "status": "vencido", "obs": "MULTA NÃO PRECEDENTE, PERDEU O PRAZO"}, {"placa": "LQE8437", "motorista": "HENRIQUE SANTOS", "orgao": "PRF", "auto": "N003302852", "local": "RJ-BR 101-KM 269.00-C - RIO BONITO", "infracao": "DESOBEDECER AS ORDENS EMANADAS PELA AUTORIDADE", "valor": 195.23, "vencimento": "2025-09-30", "prazo": "2025-04-10", "status": "vencido", "obs": "MULTA NÃO PRECEDENTE, PERDEU O PRAZO"}, {"placa": "KYH9D76", "motorista": "LUIZ GUSTAVO", "orgao": "PRF", "auto": "J007745890", "local": "RJ-BR 465-KM 21.22-D - NOVA IGUAÇU", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2026-03-23", "prazo": "2026-04-15", "status": "pago", "obs": ""}, {"placa": "RKD7J74", "motorista": "PAULO SANTA ANA", "orgao": "PRF", "auto": "J007483627", "local": "RJ-BR 116-KM 80.80-C - TERESOPOLIS", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2026-03-09", "prazo": "2026-04-15", "status": "pago", "obs": ""}, {"placa": "KRZ8F42", "motorista": "RENATO DO CARMO", "orgao": "PRF", "auto": "J007750700", "local": "RJ-BR 101-KM 508.00-C - ANGRA DOS REIS", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2026-03-23", "prazo": "2026-04-24", "status": "pago", "obs": ""}, {"placa": "LUN4G76", "motorista": "ANDRE LUIS", "orgao": "PRF", "auto": "J007910747", "local": "RJ-BR KM 329.52 - C - RIO DE JANEIRO", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2026-04-01", "prazo": "", "status": "aguardando_motorista", "obs": "AGUARDADNO ACEITE DO REAL INFRATOR"}, {"placa": "KYH9D76", "motorista": "DIMAS SIMÕES", "orgao": "PRF", "auto": "J007935543", "local": "RJ - BR 116 - KM 69.55 - C - TERESOPOLIS", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2026-04-02", "prazo": "2026-05-20", "status": "pago", "obs": ""}, {"placa": "KRF6E12", "motorista": "DIMAS SIMÕES", "orgao": "PRF", "auto": "J008202985", "local": "RJ - BR 116 - KM 182.09 - D - NOVA IGUAÇU", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2026-04-15", "prazo": "2026-05-20", "status": "pago", "obs": ""}, {"placa": "LNS3B79", "motorista": "S/N", "orgao": "CET-RIO", "auto": "RD3146586", "local": "AVENIDA AVENIDA JOAO XXIII 97, POSTO BR PETROBRAS - SANTA CRUZ - RIO DE JANEIRO", "infracao": "TRANSITAR PELA CONTRAMÃO DE DIREÇÃO EM VIA COM DUPLO SENTIDO DE CIRCULAÇÃO", "valor": 195.23, "vencimento": "2026-05-06", "prazo": "", "status": "aceito_cdt", "obs": "MULTA NÃO PRECEDENTE/PEDIDO DE DEFESA REALIZADO"}, {"placa": "RKD7J74", "motorista": "PAULO SANTA ANA", "orgao": "PRF", "auto": "N004947250", "local": "RJ-BR 101-KM 269.00-C - RIO BONITO", "infracao": "DEIXAR O PASSAGEIRO DE USAR O CINTO DE SEGURANÇA", "valor": 195.23, "vencimento": "2026-04-10", "prazo": "2026-04-11", "status": "aceito_cdt", "obs": "SEM COBRANÇA DO MOTORISTA"}, {"placa": "RKD7J74", "motorista": "PAULO SANTA ANA", "orgao": "PRF", "auto": "N004947250", "local": "RJ-BR 101-KM 269.00-C - RIO BONITO", "infracao": "CONDUZIR O VEICULO SEM EQUIPAMENTO DE PROTEÇAO NECESSÁRIO", "valor": 195.23, "vencimento": "2026-04-10", "prazo": "2026-04-11", "status": "aceito_cdt", "obs": "SEM COBRANÇA DO MOTORISTA"}, {"placa": "TUH4E92", "motorista": "JEFERSON DE MIRANDA", "orgao": "PRF", "auto": "J008517216", "local": "RJ - BR 116 - KM 108.17 - C - GUAPIMIRIM", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2026-04-28", "prazo": "2026-05-19", "status": "aguardando_motorista", "obs": ""}, {"placa": "LTE8J14", "motorista": "JORGE FRANCISCO", "orgao": "CET-RIO", "auto": "RD31467850", "local": "RUA SENADOR RUI CARNEIRO RECREIO DOS BANDEIRANTES - RIO DE JANEIRO", "infracao": "DEIXAR O CONDUTOR DE USAR O CINTO DE SEGURANÇA", "valor": 195.23, "vencimento": "2026-05-13", "prazo": "", "status": "aguardando_motorista", "obs": "AGUARDADNO ACEITE DO REAL INFRATOR"}, {"placa": "LTM9D02", "motorista": "JOSE ROBERTO TORRES", "orgao": "PRF", "auto": "N005255505", "local": "RJ - BR 465 - KM 12.00 - C - SEROPEDICA", "infracao": "CONDUZIR VEÍCULO COM O FAROL BAIXO APAGADO DURANTE O DIA EM ESTRADA RURAL", "valor": 130.16, "vencimento": "2026-04-29", "prazo": "2026-05-21", "status": "vencido", "obs": "NAO ACEITOU REAL INFRATOR/DOBRA"}, {"placa": "LRQ7A87", "motorista": "JOSE ROBERTO TORRES", "orgao": "PRF", "auto": "J008536931", "local": "RJ - BR 495 - KM 12.00 - ANGRA DOS REIS", "infracao": "TRANSITAR EM VELOCIDADE SUPERIOR A MAX PERMITIDA EM ATE 20%", "valor": 130.16, "vencimento": "2026-05-14", "prazo": "2026-05-21", "status": "vencido", "obs": "NAO ACEITOU REAL INFRATOR/DOBRA"}];
+const today=new Date();today.setHours(0,0,0,0);
+function df(ds){if(!ds)return null;const d=new Date(ds);d.setHours(0,0,0,0);return Math.round((d-today)/86400000);}
+function fd(ds){if(!ds)return'-';const[y,m,d]=ds.split('-');return d+'/'+m+'/'+y;}
+function fv(v){return'R$ '+Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
+const ML=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+function ym(ds){return /^\d{4}-\d{2}-\d{2}$/.test(ds||'')?ds.slice(0,7):'';}
+function ml(v){if(!/^\d{4}-\d{2}$/.test(v||''))return v||'';const[y,m]=v.split('-');return ML[Number(m)-1]+' / '+y;}
+const SM={
+  aguardando_motorista:['bw','#378ADD','Aguardando motorista'],
+  aceito_cdt:['ba','#639922','Aceito na CDT'],
+  pago:['bp','#1D9E75','Pago'],
+  vencido:['bo','#E24B4A','Vencido'],
+  em_analise:['be','#7F77DD','Em análise'],
+};
+let multas=SOURCE.map((m,i)=>({...m,id:i+1}));
+let nid=multas.length+1,ctab='todas',eid=null;
+function sv(){try{localStorage.setItem('mc',JSON.stringify(multas));}catch(e){}}
+function lv(){try{const d=localStorage.getItem('mc');if(d){multas=JSON.parse(d);nid=Math.max(...multas.map(m=>m.id))+1;}}catch(e){}}
+function gf(){
+  const q=document.getElementById('si').value.toLowerCase();
+  const o=document.getElementById('fo').value;
+  const m=document.getElementById('fm').value;
+  const mes=document.getElementById('fmes').value;
+  return multas.filter(x=>{
+    if(ctab!=='todas'&&x.status!==ctab)return false;
+    if(o&&x.orgao!==o)return false;
+    if(m&&x.motorista!==m)return false;
+    if(mes&&ym(x.vencimento)!==mes)return false;
+    if(q&&!x.placa.toLowerCase().includes(q)&&!(x.motorista||'').toLowerCase().includes(q)&&!(x.auto||'').toLowerCase().includes(q))return false;
+    return true;
+  });
+}
+function rs(){
+  const v=multas.filter(m=>m.status==='vencido').length;
+  const u=multas.filter(m=>{const d=df(m.prazo);return d!==null&&d>=0&&d<=5&&m.status!=='pago'&&m.status!=='vencido';}).length;
+  const p=multas.filter(m=>m.status==='pago').length;
+  const ab=multas.filter(m=>m.status!=='pago').reduce((s,m)=>s+m.valor,0);
+  document.getElementById('stats').innerHTML=`
+    <div class="sc"><div class="sl">Total</div><div class="sv">${multas.length}</div></div>
+    <div class="sc"><div class="sl">Valor em aberto</div><div class="sv sm">${fv(ab)}</div></div>
+    <div class="sc"><div class="sl">Prazo próximo</div><div class="sv ${u>0?'d':''}">${u}</div></div>
+    <div class="sc"><div class="sl">Vencidas</div><div class="sv ${v>0?'w':''}">${v}</div></div>
+    <div class="sc"><div class="sl">Pagas</div><div class="sv s">${p}</div></div>
+  `;
+}
+function ra(){
+  const u=multas.filter(m=>{const d=df(m.prazo);return d!==null&&d>=0&&d<=5&&m.status!=='pago'&&m.status!=='vencido';});
+  const box=document.getElementById('abox');
+  if(!u.length){box.innerHTML='';return;}
+  const it=u.map(m=>{const d=df(m.prazo);const l=d===0?'vence hoje':`vence em ${d}d`;return`<b>${m.placa}</b> (${m.motorista||'—'}) — prazo RCA <b>${l}</b>`;}).join('<br>');
+  box.innerHTML=`<div class="ab"><i class="ti ti-alert-triangle ai"></i><div><div class="at"><i class="ti ti-bell" style="font-size:13px;vertical-align:-1px;margin-right:4px"></i>Atenção: ${u.length} multa${u.length>1?'s':''} com prazo próximo (≤5 dias)</div><div class="ax">${it}</div></div></div>`;
+}
+function rf(){
+  const og=[...new Set(multas.map(m=>m.orgao).filter(Boolean))].sort();
+  const mt=[...new Set(multas.map(m=>m.motorista).filter(Boolean))].sort();
+  const ms=[...new Set(multas.map(m=>ym(m.vencimento)).filter(Boolean))].sort();
+  const so=document.getElementById('fo'),co=so.value;
+  so.innerHTML='<option value="">Todos os órgãos</option>'+og.map(o=>`<option${o===co?' selected':''} value="${o}">${o}</option>`).join('');
+  const sm=document.getElementById('fm'),cm=sm.value;
+  sm.innerHTML='<option value="">Todos os motoristas</option>'+mt.map(m=>`<option${m===cm?' selected':''} value="${m}">${m}</option>`).join('');
+  const sf=document.getElementById('fmes'),cf=sf.value;
+  sf.innerHTML='<option value="">Todos os meses</option>'+ms.map(m=>`<option${m===cf?' selected':''} value="${m}">${ml(m)}</option>`).join('');
+}
+function clearFilters(){
+  document.getElementById('si').value='';
+  document.getElementById('fo').value='';
+  document.getElementById('fm').value='';
+  document.getElementById('fmes').value='';
+  render();
+}
+function dc(ds,st){
+  if(st==='pago'||st==='vencido')return'dok';
+  const d=df(ds);if(d===null||d<0)return'dok';
+  if(d<=2)return'dur';if(d<=5)return'dwn';return'dok';
+}
+function dl(ds,st){
+  if(!ds)return'-';const d=df(ds);const b=fd(ds);
+  if(st==='pago'||st==='vencido')return b;
+  if(d===0)return b+' <small>(hoje)</small>';
+  if(d===1)return b+' <small>(amanhã)</small>';
+  if(d>0&&d<=5)return b+` <small>(${d}d)</small>`;
+  return b;
+}
+function render(){
+  rs();ra();rf();
+  const data=gf();
+  const tb=document.getElementById('tbody');
+  if(!data.length){tb.innerHTML='<tr><td colspan="11"><div class="empty"><i class="ti ti-clipboard-x"></i>Nenhuma multa encontrada</div></td></tr>';return;}
+  tb.innerHTML=data.map(m=>{
+    const[bc,dotc,bl]=SM[m.status]||['','',''];
+    const obs=m.obs||'';
+    return`<tr>
+      <td><span class="pt">${m.placa}</span></td>
+      <td style="white-space:nowrap">${m.motorista||'—'}</td>
+      <td style="white-space:nowrap">${m.orgao||'—'}</td>
+      <td style="font-family:var(--fm);font-size:11px">${m.auto||'—'}</td>
+      <td class="ic" title="${(m.infracao||'').replace(/"/g,'&quot;')}">${m.infracao||'—'}</td>
+      <td style="white-space:nowrap;font-weight:500">${fv(m.valor)}</td>
+      <td style="white-space:nowrap">${fd(m.vencimento)}</td>
+      <td class="${dc(m.prazo,m.status)}">${dl(m.prazo,m.status)}</td>
+      <td><span class="badge ${bc}"><span class="dot" style="background:${dotc}"></span>${bl}</span></td>
+      <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--tx2);font-size:11px" title="${obs.replace(/"/g,'&quot;')}">${obs}</td>
+      <td><div class="actions">
+        <button class="ib" title="Editar" onclick="editM(${m.id})"><i class="ti ti-edit"></i></button>
+        <button class="ib" title="Excluir" onclick="delM(${m.id})" style="color:#c0392b"><i class="ti ti-trash"></i></button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+function setTab(t,el){ctab=t;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));el.classList.add('active');render();}
+function openModal(m){
+  eid=m?m.id:null;
+  document.getElementById('mtitle').textContent=m?'Editar multa':'Nova multa';
+  document.getElementById('fp').value=m?m.placa:'';
+  document.getElementById('fm2').value=m?m.motorista:'';
+  document.getElementById('fo2').value=m?m.orgao:'';
+  document.getElementById('fau').value=m?(m.auto||''):'';
+  document.getElementById('flo').value=m?(m.local||''):'';
+  document.getElementById('fin').value=m?(m.infracao||''):'';
+  document.getElementById('fv').value=m?m.valor:'';
+  document.getElementById('fdt').value=m?m.vencimento:'';
+  document.getElementById('fpr').value=m?m.prazo:'';
+  document.getElementById('fst').value=m?m.status:'aguardando_motorista';
+  document.getElementById('fob').value=m?(m.obs||''):'';
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');eid=null;}
+function editM(id){const m=multas.find(x=>x.id===id);if(m)openModal(m);}
+function delM(id){if(!confirm('Excluir esta multa?'))return;multas=multas.filter(m=>m.id!==id);sv();render();}
+function saveMulta(){
+  const p=document.getElementById('fp').value.trim().toUpperCase();
+  const mo=document.getElementById('fm2').value.trim();
+  const o=document.getElementById('fo2').value.trim();
+  const val=parseFloat(document.getElementById('fv').value);
+  if(!p||!mo||!o||isNaN(val)){alert('Preencha os campos obrigatórios (*).');return;}
+  const r={
+    id:eid||nid++,placa:p,motorista:mo,orgao:o,
+    auto:document.getElementById('fau').value.trim(),
+    local:document.getElementById('flo').value.trim(),
+    infracao:document.getElementById('fin').value.trim(),
+    valor:Math.round(val*100)/100,
+    vencimento:document.getElementById('fdt').value,
+    prazo:document.getElementById('fpr').value,
+    status:document.getElementById('fst').value,
+    obs:document.getElementById('fob').value.trim()
+  };
+  if(eid){const i=multas.findIndex(m=>m.id===eid);if(i>=0)multas[i]=r;}
+  else{multas.push(r);}
+  sv();closeModal();render();
+}
+function exportCSV(){
+  const SL={aguardando_motorista:'Aguardando motorista',aceito_cdt:'Aceito na CDT',pago:'Pago',vencido:'Vencido',em_analise:'Em análise'};
+  const h='Placa,Motorista,Orgão,Auto,Local,Infração,Valor,Data,Prazo RCA,Status,Observações';
+  const data=gf();
+  const rows=data.map(m=>[m.placa,m.motorista,m.orgao,m.auto||'',m.local||'',m.infracao||'',m.valor,fd(m.vencimento),fd(m.prazo),SL[m.status]||m.status,m.obs||''].map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(','));
+  const csv=[h,...rows].join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
+  const mes=document.getElementById('fmes').value;
+  a.download='multas_'+(mes||new Date().toISOString().slice(0,10))+'.csv';
+  a.click();
+}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target===document.getElementById('modal'))closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+lv();render();
+</script>
+</body>
+</html>
