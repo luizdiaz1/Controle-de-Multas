@@ -1,0 +1,20 @@
+CONTROLE DE MULTAS COM SUPABASE
+
+1) No Supabase, abra SQL Editor > New query.
+2) Copie e rode o conteúdo do arquivo CRIAR_TABELA_SUPABASE.sql.
+3) Suba estes arquivos no GitHub:
+   - index.html
+   - supabase-config.js
+   - importar_multas.html
+   - multas-iniciais.js
+4) Aguarde o deploy do Vercel.
+5) Abra no navegador:
+   https://SEU-LINK-VERCEL/importar_multas.html
+6) Clique em Importar multas iniciais.
+7) Depois use normalmente:
+   https://SEU-LINK-VERCEL/index.html
+
+IMPORTANTE:
+Neste primeiro modelo deixei sem RLS/policies, porque você pediu para não criar permissões agora.
+Isso facilita o teste, mas qualquer pessoa com o link pode adicionar/editar/excluir se encontrar os botões.
+Depois que funcionar, o ideal é colocar login ou permissões.
