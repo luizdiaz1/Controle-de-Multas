@@ -1,0 +1,18 @@
+CONTROLE DE MULTAS - VERSÃO SUPABASE IGUAL AO INDEX1
+
+Arquivos:
+- index.html: sistema principal conectado ao Supabase.
+- supabase-config.js: URL e anon key do Supabase.
+- importar_multas.html: importa/atualiza as 117 multas do index1.
+- multas-iniciais.js: base exata extraída do index1.html.
+- CORRIGIR_TABELA_SUPABASE.sql: rode no Supabase antes de importar.
+
+Como usar:
+1. No Supabase, rode o arquivo CORRIGIR_TABELA_SUPABASE.sql no SQL Editor.
+2. Suba todos os arquivos deste pacote no GitHub.
+3. Espere o Vercel atualizar.
+4. Abra /importar_multas.html e clique em Importar/atualizar 117 multas.
+5. Abra /index.html.
+
+Obs.: O importador usa upsert pelo ID. Se a multa já existir, ele atualiza os dados, inclusive município.
+Depois que tudo estiver certo, você pode remover importar_multas.html e multas-iniciais.js do GitHub para ninguém importar de novo sem querer.
